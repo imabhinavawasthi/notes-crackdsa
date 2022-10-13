@@ -7,13 +7,13 @@ const API = axios.create({
     baseURL: 'https://notes-crackdsa.herokuapp.com/'
 })
 
-// API.interceptors.request.use((req) => {
-//     if (localStorage.getItem('user')) {
-//         req.headers.Authorization = `Bearer ${JSON.parse(localStorage.getItem('user')).token}`
-//     }
+API.interceptors.request.use((req) => {
+    if (localStorage.getItem('user')) {
+        req.headers.Authorization = `Bearer ${JSON.parse(localStorage.getItem('user')).token}`
+    }
 
-//     return req
-// })
+    return req
+})
 
 export const userRegister = async (userData) => {
 
@@ -39,6 +39,13 @@ export const sendOTP = async (userData) => {
 export const verifyOTP = async (userData) => {
 
     let user = await API.post('/auth/otpverify', userData)
+
+    return user;
+}
+
+export const addProblem = async (userData) => {
+
+    let user = await API.post('/user/createtodo', userData)
 
     return user;
 }
