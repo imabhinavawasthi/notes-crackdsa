@@ -43,7 +43,7 @@ const Signup = (props) => {
     setIsActive((current) => !current);
   };
   const navigate = useNavigate();
-
+  let ress;
   const signup = async (e) => {
     e.preventDefault();
     setInfomess("Registering User...")
@@ -62,15 +62,16 @@ const Signup = (props) => {
       setInfomess()
       return;
     }
-    const res = await api.userRegister({ name: name, email: email, password: password, college: college, verified: false });
-    if (res.data.message == "user already exists") {
+    ress = await api.userRegister({ name: name, email: email, password: password, college: college, verified: false });
+    if (ress.data.message == "user already exists") {
       setInfomess("User Already Exists, Please Login");
       return;
     }
+    console.log(ress);
     setInfomess();
     setErrormess();
     setInfomess("Sending Email Verification OTP.")
-    let res2 = await api.sendOTP({ email: email });
+    let res2 = await api.sendOTP({ email: email, name:name });
     setInfomess();
     setSignupOtpPage(true);
     setVermess(email);
@@ -90,42 +91,52 @@ const Signup = (props) => {
       }
       else {
         setSuccessmess("Successfully Verified, Welcome to crackDSA!")
-        setTimeout(() => {
-          navigate("/");
-        }, 2000);
+        setLogEmail(email);
+        setLogPassword(password);
+        login(e);
+
       }
     }
   }
-
+  let resl;
   const login = async (e) => {
     e.preventDefault();
+    setLogInfomess("Logging You In...")
     if (!logemail || !logpassword) {
       setLogErrormess("Please fill all the fields")
+      setLogInfomess()
       return;
     }
     if (isValidEmail(logemail) == false) {
       setLogErrormess("Enter Valid Email");
+      setLogInfomess()
       return;
     }
-    const res = await api.userLogin({ email: logemail, password: logpassword });
-    if (res.data.message == "wrong email or password") {
+    resl = await api.userLogin({ email: logemail, password: logpassword });
+    if (resl.data.message == "wrong email or password") {
       setLogInfomess("Oops! Wrong Email or Password");
       return;
     }
-    else if (res.data.message == "email not verified") {
+    else if (resl.data.message == "email not verified") {
 
       setLogErrormess();
       setLogInfomess("Sending Email Verification OTP...")
-      let otpsendres = await api.sendOTP({ email:logemail });
+      let otpsendres = await api.sendOTP({ email: logemail,name:logemail });
       setLogInfomess();
       setLogVermess(logemail);
       setLoginOtpPage(true);
       return;
     }
+    else if (resl.data.message == "user not exists") {
+      setLogInfomess("User Doesn't Exists");
+      return;
+    }
     else {
-      setLogSuccessmess("Logging You In...")
+      setLogInfomess();
+      setLogSuccessmess("You are logged in!")
+      localStorage.setItem("user", JSON.stringify(resl.data))
       setTimeout(() => {
-        navigate("/")
+        window.location.reload(false);
       }, 1000);
     }
   }
@@ -143,9 +154,7 @@ const Signup = (props) => {
       }
       else {
         setLogSuccessmess("Successfully Verified, Welcome to crackDSA!")
-        setTimeout(() => {
-          navigate("/");
-        }, 2000);
+        login(e);
       }
     }
   }
@@ -160,7 +169,7 @@ const Signup = (props) => {
                 {logerrormess && (<>
                   <div className="error-mess" >{logerrormess}</div>
                 </>)}
-                {(logvermess&&!logsuccessmess) && (
+                {(logvermess && !logsuccessmess) && (
                   <>
                     <div className="ver-mess">
                       <p>Your email is not verified</p>
@@ -244,7 +253,7 @@ const Signup = (props) => {
                   />
                 </div>
                 <p className="for-pass">
-                  Forgot Password? <NavLink className="nav-col" to="/login/forgotpassword">Reset Now!</NavLink>
+                  Forgot Password? <NavLink className="nav-col" to="/auth/forgotpassword">Reset Now!</NavLink>
                 </p>
                 <input
                   onClick={login}
@@ -292,7 +301,7 @@ const Signup = (props) => {
                         {successmess}
                       </div>
                     </>}
-                    {(vermess&&!successmess) && (
+                    {(vermess && !successmess) && (
                       <>
                         <form className="sign-up-form">
                           <div className="ver-mess">
