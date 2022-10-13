@@ -34,7 +34,7 @@ export const items = [
   <SidebarItem>
   <div className="">
   <hr/>
-    <button onClick={(e)=>{logout(e)}}  style={{background:"white", textDecoration: 'none', color: "var(--theme-color)" }}>Logout <BoxArrowInRight/></button>
+    <button className="remove-default" onClick={(e)=>{logout(e)}}  style={{background:"white", textDecoration: 'none', color: "var(--theme-color)" }}>Logout <BoxArrowInRight/></button>
     <hr />
   </div>
 </SidebarItem>,
