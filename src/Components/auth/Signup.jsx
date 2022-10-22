@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router';
 import * as api from "../../axios.js"
 
 const Signup = (props) => {
+  const navigate=useNavigate()
   const [isActive, setIsActive] = useState(false);
   const [email, setEmail] = useState();
   const [logemail, setLogEmail] = useState();
@@ -31,7 +32,11 @@ const Signup = (props) => {
   const [signupotp, setSignupotp] = useState();
   const [loginotp, setLoginotp] = useState();
 
+  const curruser = JSON.parse(localStorage.getItem('crackdsa-user'));
 
+  if(curruser){
+    navigate("/")
+  }
 
   function isValidEmail(email) {
     return /\S+@\S+\.\S+/.test(email);
@@ -42,7 +47,6 @@ const Signup = (props) => {
     setLogErrormess(); setLogInfomess(); setLogSuccessmess();
     setIsActive((current) => !current);
   };
-  const navigate = useNavigate();
   let ress;
   const signup = async (e) => {
     e.preventDefault();
@@ -134,7 +138,7 @@ const Signup = (props) => {
     else {
       setLogInfomess();
       setLogSuccessmess("You are logged in!")
-      localStorage.setItem("user", JSON.stringify(resl.data))
+      localStorage.setItem("crackdsa-user", JSON.stringify(resl.data))
       setTimeout(() => {
         window.location.reload(false);
       }, 1000);

@@ -7,9 +7,18 @@ import { items } from '../SidebarP/ItemsList.js';
 import { Sidebar } from "react-responsive-sidebar";
 import Tabs from '../../Components/utils/Tabs/Tabs.jsx';
 import Avatar from 'react-avatar';
+import ProblemList from '../Problems/ProblemList.jsx';
+
 
 const Dashboard = (props) => {
-  const curruser = props.curruser;
+  const navigate=useNavigate()
+
+  const curruser = JSON.parse(localStorage.getItem('crackdsa-user'));
+
+  if(!curruser){
+    navigate("/auth")
+  }
+  
   var day = new Date();
   var hr = day.getHours();
   const [wish, setWish] = useState("");
@@ -42,24 +51,26 @@ const Dashboard = (props) => {
         >
           <div className='dashb-back-color-css'>
             <div className='container '>
-              <div className='row'>
-                <div className='col-6'>
+              {/* <div className='row '>
+                <div className='col-12'>
                   <div className='container mt-5 mb-3 d-flex justify-content-center align-items-center'>
                     <div className='row'>
+                      <div className='col-2'></div>
                       <div className='col-4'>
-                        <Avatar name={curruser.name} round={true} size={80} color={"var(--theme-color)"} />
+                        <Avatar name={curruser.name} round={true} size={50} color={"var(--theme-color)"} />
                       </div>
-                      <div className='col-8'>
-                        {wish}{curruser.name}
+                      <div className='col-2'></div>
+                      <div className='col-4'>
+                        {wish}<br/>{curruser.name}
                       </div>
 
                     </div>
                   </div>
                 </div>
               </div>
-              <hr />
-              <div className='row'>
-                <Tabs />
+              <hr /> */}
+              <div className='row mt-5 p-3'>
+                <ProblemList/>
               </div>
             </div>
 

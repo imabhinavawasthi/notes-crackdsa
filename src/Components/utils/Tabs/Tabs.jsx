@@ -1,6 +1,7 @@
 import { TabPanel, useTabs } from "react-headless-tabs";
 import * as React from "react";
 import ProblemsView from "../../../Containers/Problems/ProblemView.jsx"
+import ProblemList from "../../../Containers/Problems/ProblemList.jsx";
 
 export default function Tabs() {
   const items = ["Problems", "Solved", "Unsolved", "Tags"];
@@ -69,7 +70,7 @@ export default function Tabs() {
         {items.map((item) => {
           return (
             <TabPanel key={item} hidden={selectedTab !== item}>
-              {item=="Problems"&&<><ProblemsView/></>}
+              {item=="Problems"&&<><ProblemList/> </>}
               
             </TabPanel>
           );
