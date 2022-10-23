@@ -11,15 +11,22 @@ const RowProblem = (props) => {
     let platform=props.problem?.platform;
     return (
         <div><div class="job-box d-md-flex align-items-center justify-content-between mb-3">
-            <div class="job-left my-2 d-md-flex align-items-center flex-wrap">
-                {platform=="Leetcode"&&<img width="30px" src={leetcodeLogo} />}
-                {platform=="GeeksforGeeks"&&<img width="30px" src={gfgLogo} />}
+            <div class="job-left d-md-flex align-items-center flex-wrap">
+            {props.problem?.isSolved?
+                            <div><FontAwesomeIcon color='green' icon={faCheckCircle} /></div>:
+                            <div>
+                                <FontAwesomeIcon color="#8B8000"  icon={faExclamationCircle} />
+                            </div>
+                            }
 
                 <div class="job-content">
                     
                     <ul class="ul-list-css d-md-flex flex-wrap text-capitalize ff-open-sans">
                         <li>
-                        <a href={props.problem?.link} target="_blank" style={{textDecoration:"none",color:"black"}} ><h5 class="text-center text-md-left problem-list-hover-css">{props.problem?.title}</h5></a>
+                        <a href={props.problem?.link} target="_blank" style={{textDecoration:"none",color:"black"}} ><h5 class="problem-list-hover-css">
+                            {platform=="Leetcode"&&<img width="30px" src={leetcodeLogo} />}
+                            {platform=="GeeksforGeeks"&&<img width="30px" src={gfgLogo} />}
+                            &nbsp;&nbsp;&nbsp;{props.problem?.title}</h5></a>
                         </li>
                         <li className='mob-hidden-css' >
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -31,7 +38,7 @@ const RowProblem = (props) => {
                             <FontAwesomeIcon color='var(--theme-color)' icon={faCode} /> {props.problem?.platform} &nbsp;&nbsp;&nbsp;
                         </li>
                         <li class="mr-4 problem-list-hover-css">
-                            {props.problem.isSolved?
+                            {props.problem?.isSolved?
                             <div><FontAwesomeIcon color='green' icon={faCheckCircle} /> Solved&nbsp;&nbsp;&nbsp;</div>:
                             <div>
                                 <FontAwesomeIcon color="#8B8000"  icon={faExclamationCircle} /> Unsolved&nbsp;&nbsp;&nbsp;

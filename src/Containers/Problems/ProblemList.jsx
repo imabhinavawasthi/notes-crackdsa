@@ -4,12 +4,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUpRightFromSquare, faCheckCircle, faCode, faTags, faTerminal } from "@fortawesome/free-solid-svg-icons";
 import RowProblem from './RowProblem.jsx';
 import * as api from "../../axios.js"
+import Loading from '../../Components/Loading/Loading.jsx';
 
 const ProblemList = () => {
     const [problems, setProblems] = useState()
+    const [problemsFilter, setProblemsFilter] = useState()
     const [name, setName] = useState()
     const [email, setEmail] = useState()
     const [userId, setUserID] = useState()
+    const [nameSearch, setNameSearch] = useState("")
+    const [statusSearch, setStatusSearch] = useState("")
+    const [topicSearch, setTopicSearch] = useState("")
+    const [platformSearch, setPlatformSearch] = useState("")
 
     useEffect(() => {
         const fetchData = async () => {
@@ -23,6 +29,29 @@ const ProblemList = () => {
         fetchData()
 
     }, [])
+
+    useEffect(() => {
+        const filterData = async () => {
+            setProblemsFilter(problems);
+            if(nameSearch!="")
+            setProblemsFilter(problems.filter(detail => detail?.title.toLowerCase().includes(nameSearch.toLowerCase())));
+            if(statusSearch!="")
+            {
+                if(statusSearch=="1"){
+                    setProblemsFilter(problems.filter(detail => detail?.isSolved==true));
+                }
+                else{
+                    setProblemsFilter(problems.filter(detail => detail?.isSolved==false));
+                }
+            }
+            if(topicSearch!=""){
+                setProblemsFilter(problems.filter(detail => detail?.topic.includes(topicSearch)));
+            }
+        }
+        filterData()
+
+    }, [problems,nameSearch,topicSearch,platformSearch,statusSearch])
+
     return (
         <div>
 
@@ -40,42 +69,51 @@ const ProblemList = () => {
                                     <div style={{ width: "100%" }} class="row p-4">
                                         <div class="col-md-6 col-lg-3 my-2">
                                             <div class="input-group position-relative">
-                                                <input type="text" class="form-control" placeholder="Enter Problem Name" id="keywords" />
+                                                <input onChange={(e)=>{setNameSearch(e.target.value);}} type="text" class="form-control" placeholder="Enter Problem Name" id="keywords" />
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-lg-2 my-2">
                                             <div class="select-container">
-                                                <select class="custom-select">
-                                                    <option selected="">Status</option>
-                                                    <option value="1">Jaipur</option>
-                                                    <option value="2">Pune</option>
-                                                    <option value="3">Bangalore</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 col-lg-2 my-2">
-                                            <div class="select-container">
-                                                <select class="custom-select">
-                                                    <option selected="">Topic/Tag</option>
-                                                    <option value="1">Ui designer</option>
-                                                    <option value="2">JS developer</option>
-                                                    <option value="3">Web developer</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 col-lg-2 my-2">
-                                            <div class="select-container">
-                                                <select class="custom-select">
-                                                    <option selected="">Platform</option>
-                                                    <option value="1">Ui designer</option>
-                                                    <option value="2">JS developer</option>
-                                                    <option value="3">Web developer</option>
+                                                <select onChange={(e)=>{setStatusSearch(e.target.value)}} class="custom-select">
+                                                    <option value="" selected="">Status</option>
+                                                    <option value="1">Solved</option>
+                                                    <option value="2">Unsolved</option>
+                                                    <option value="">All</option>
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-lg-3 my-2">
-                                            <button style={{ backgroundColor: "white", color: "var(--theme-color)" }} type="button" class="button-css" id="contact-submit">
-                                                Search
+                                            <div class="select-container">
+                                                <select onChange={(e)=>{setTopicSearch(e.target.value)}} class="custom-select">
+                                                    <option value="" selected="">Topic/Tag</option>
+                                                    <option value="">All</option>
+                                                    <option value="Binary Search">Binary Search</option>
+                                                    <option value="Dynamic Programming">Dynamic Programming</option>
+                                                    <option value="Other">Other</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-lg-2 my-2">
+                                            <div class="select-container">
+                                                <select onChange={(e)=>{setPlatformSearch(e.target.value)}} class="custom-select">
+                                                    <option value="" selected="">Platform</option>
+                                                    <option value="">All</option>
+                                                    <option value="Leetcode">Leetcode</option>
+                                                    <option value="GeeksforGeeks">GeeksforGeeks</option>
+                                                    <option value="HackerRank">HackerRank</option>
+                                                    <option value="CodeChef">CodeChef</option>
+                                                    <option value="HackerEarth">HackerEarth</option>
+                                                    <option value="TopCoder">TopCoder</option>
+                                                    <option value="Spoj">Spoj</option>
+                                                    <option value="CodeForces">CodeForces</option>
+                                                    <option value="AtCoder">AtCoder</option>
+                                                    <option value="Other">Other</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-lg-2 my-2">
+                                            <button onClick={(e)=>{e.preventDefault();}} style={{ backgroundColor: "white", color: "var(--theme-color)" }} type="button" class="button-css" id="contact-submit">
+                                                Reset Search
                                             </button>
                                         </div>
                                     </div>
@@ -83,12 +121,11 @@ const ProblemList = () => {
                             </div>
 
                             <div class="filter-result ">
-
-                                {problems?.map((problem)=>{
-                                    return(
+                                {problemsFilter?.map((problem) => {
+                                    return (
                                         <RowProblem problem={problem} />
                                     )
-                                })}
+                                })||<div style={{height:"500px"}} ><Loading a="w"/></div>}
 
                             </div>
                         </div>

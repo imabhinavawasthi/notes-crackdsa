@@ -7,6 +7,8 @@ import * as api from "../../axios.js"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import "./problemlist.css"
+import Loading from "../../Components/Loading/Loading.jsx"
+import Footer from '../../Components/Footer/Footer.jsx';
 
 //https://codepen.io/stack-findover/pen/OJRvPQv
 
@@ -30,17 +32,28 @@ const AddProblem = (props) => {
   const [problemDes, setProblemDes] = useState("");
   const [problemTopic, setProblemTopic] = useState("Other");
   const [problemPlatform, setProblemPlatform] = useState("Other");
+  const [sloading,setSloading]=useState(false);
+  const [error,setError]=useState({des:false,name:false,link:false})
 
   const submitform = async (e) => {
     e.preventDefault();
+
     if (!problemDes || !problemLink || !problemName) {
-      alert("enter")
+      if(!problemDes){
+        setError({des:true,name:error.name,link:error.link})
+      }
+      if(!problemLink){
+        setError({des:error.des,name:error.name,link:true})
+      }
+      if(!problemName){
+        setError({des:error.des,name:true,link:error.link})
+      }
       return;
     }
-    let res = await api.addProblem({ "title": problemName, "description": problemDes, "isSolved": isSolved, "link": problemLink, "topic": problemTopic, "platform":problemPlatform });
-
-    console.log(res);
-    alert("done")
+    setSloading(true);
+    let res = await api.addProblem({ "title": problemName, "description": problemDes, "isSolved": isSolved, "link": problemLink, "topic": problemTopic, "platform": problemPlatform });
+    setSloading(false);
+    navigate(`/user/problem/${problemName}/${res?.data?.id}`)
   }
   return (
     <div>
@@ -100,17 +113,22 @@ const AddProblem = (props) => {
                         <div style={{ width: "100%" }} class="career-form row p-0 mb-2">
                           <div class="col-md-12 col-lg-12 my-2">
                             <div class="input-group position-relative">
-                              <input onChange={(e) => { setProblemName(e.target.value) }} type="text" class="form-control" placeholder="Enter Problem Name" id="keywords" />
+                              <input onChange={(e) => {setError({des:error.des,name:false,link:error.link}); setProblemName(e.target.value) }} type="text" class="form-control" placeholder="Enter Problem Name" id="keywords" />
+                              
                             </div>
+                            
                           </div>
+                          
                         </div>
+                        {error.name&&<p style={{color:"red"}}>* Enter Problem Name</p>}
                         <div style={{ width: "100%" }} class="career-form row p-0 mb-2">
                           <div class="col-md-12 col-lg-12 my-2">
                             <div class="input-group position-relative">
-                              <input onChange={(e) => { setProblemLink(e.target.value) }} type="text" class="form-control" placeholder="Enter Problem Link" id="keywords" />
+                              <input onChange={(e) => { setError({des:error.des,name:error.name,link:false}); setProblemLink(e.target.value); }} type="text" class="form-control" placeholder="Enter Problem Link" id="keywords" />
                             </div>
                           </div>
                         </div>
+                        {error.link&&<p style={{color:"red"}}>* Enter Problem Link</p>}
                         <div style={{ width: "100%" }} class="career-form row p-0 mb-2">
                           <div class="col-md-6 col-lg-6 my-2">
                             <div class="select-container">
@@ -118,6 +136,13 @@ const AddProblem = (props) => {
                                 <option value="Other" selected="">Platform</option>
                                 <option value="Leetcode">Leetcode</option>
                                 <option value="GeeksforGeeks">GeeksforGeeks</option>
+                                <option value="HackerRank">HackerRank</option>
+                                <option value="CodeChef">CodeChef</option>
+                                <option value="HackerEarth">HackerEarth</option>
+                                <option value="TopCoder">TopCoder</option>
+                                <option value="Spoj">Spoj</option>
+                                <option value="CodeForces">CodeForces</option>
+                                <option value="AtCoder">AtCoder</option>
                                 <option value="Other">Other</option>
                               </select>
                             </div>
@@ -137,11 +162,12 @@ const AddProblem = (props) => {
                         <div style={{ width: "100%" }} class="career-form row p-0 mb-4">
                           <div class="col-md-12 col-lg-12 my-2">
                             <div class="input-group position-relative">
-                              <textarea onChange={(e) => { setProblemDes(e.target.value) }} placeholder='Write about the problem, your approach, important concepts etc.' style={{ "min-width": "100%" }} class="form-control" id="exampleFormControlTextarea1" rows="4"></textarea>
+                              <textarea onChange={(e) => {setError({des:false,name:error.name,link:error.link}); setProblemDes(e.target.value) }} placeholder='Write about the problem, your approach, important concepts etc.' style={{ "min-width": "100%" }} class="form-control" id="exampleFormControlTextarea1" rows="4"></textarea>
 
                             </div>
                           </div>
                         </div>
+                        {error.des&&<p style={{color:"red"}}>* Enter Problem Description</p>}
                         <div className='wrapper '>
                           <input checked={isSolved} className='input-display-none' onChange={(e) => { setIsSolved(true) }} type="radio" name="solved" value="solved" id="option-1" />
                           <input checked={!isSolved} className='input-display-none' onChange={(e) => { setIsSolved(false) }} type="radio" name="unsolved" value="unsolved" id="option-2" />
@@ -152,7 +178,7 @@ const AddProblem = (props) => {
                             <span>Unsolved</span>
                           </label>
                         </div>
-                        <button onClick={(e) => { submitform(e) }} className='mt-5 button-css' type="submit" for="addproblem-form">Add Problem</button>
+                        {sloading?<div className='mt-3'><Loading/></div>:<button onClick={(e) => { submitform(e) }} className='mt-5 button-css' type="submit" for="addproblem-form">Add Problem</button>}
                       </form>
                     </div>
                   </div>
@@ -170,6 +196,7 @@ const AddProblem = (props) => {
           </div>
         </div>
       </Sidebar>}
+      
     </div>
   )
 }

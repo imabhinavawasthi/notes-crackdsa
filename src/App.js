@@ -14,6 +14,8 @@ function App() {
 
   const user = JSON.parse(localStorage.getItem('crackdsa-user'));
 
+  
+
   return (
     <div>
       <BrowserRouter>
@@ -21,7 +23,7 @@ function App() {
           <Route exact path="/" element={<Navigate replace to="/dashboard" />} />
           <Route exact path="/dashboard" element={<Dashboard curruser={user} />} />
           <Route exact path="/user/addproblem" element={<AddProblem />} />
-          <Route exact path="/user/problem" element={<ProblemView />} />
+          <Route exact path="/user/problem/:name/:id" element={<ProblemView />} />
           <Route exact path="/user/pofile" element={<Profile />} />
           <Route exact path="/dsasheet" element={<DsaSheet />} />
           <Route exact path="/auth" element={<Signup />} />
