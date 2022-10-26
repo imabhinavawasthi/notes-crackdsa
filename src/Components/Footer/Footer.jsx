@@ -51,7 +51,7 @@ const Footer = () => {
               A Unit of <strong><a style={{textDecoration:"none", color:"var(--theme-color)"}} href="https://crackdsa.com" target="_blank" >crackDSA.com</a></strong>
             </p>
             <p>
-                <a href="" target="_blank" style={{textDecoration:"none"}} >Terms & Conditions <FontAwesomeIcon icon={faArrowUpRightFromSquare} /></a>
+                <a href="/terms&conditions" target="_blank" style={{textDecoration:"none"}} >Terms & Conditions <FontAwesomeIcon icon={faArrowUpRightFromSquare} /></a>
             </p>
           </div>
 

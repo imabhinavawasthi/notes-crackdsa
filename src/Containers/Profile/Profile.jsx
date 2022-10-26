@@ -35,6 +35,12 @@ const Profile = () => {
     }
     fetchData()
   }, []);
+  var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+function convertDate(date_str) {
+  const temp_date = date_str.split("-");
+  return temp_date[2] + " " + months[Number(temp_date[1]) - 1] + " " + temp_date[0];
+}
   return (
     <div>
       {curruser &&
@@ -86,13 +92,13 @@ const Profile = () => {
                           <hr class="mt-0 mb-4" />
                           <div class="row pt-1">
                             <div class="col-6 mb-3">
-                              <strong><h6 style={{ color: "var(--theme-color)" }}>Problem Added</h6></strong>
+                              <strong><h6 style={{ color: "var(--theme-color)" }}>Problems Added</h6></strong>
                               {userDetails ? <p class="text-muted">{userDetails?.todos.length} Problems</p> : <Skeleton />}
                             </div>
                             <div class="col-6 mb-3">
                               <strong><h6 style={{ color: "var(--theme-color)" }}>Registered On</h6></strong>
 
-                              {userDetails ? <p class="text-muted">{userDetails?.date.substring(0, 10)}</p> : <Skeleton />}
+                              {userDetails ? <p class="text-muted">{convertDate(userDetails?.date.substring(0, 10))}</p> : <Skeleton />}
                             </div>
                           </div>
                           {/* <div class="d-flex justify-content-start">

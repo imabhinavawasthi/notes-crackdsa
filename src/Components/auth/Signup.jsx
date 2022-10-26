@@ -50,6 +50,7 @@ const Signup = (props) => {
   let ress;
   const signup = async (e) => {
     e.preventDefault();
+
     setInfomess("Registering User...")
     if (!name || !email || !password || !college) {
       setErrormess("Please fill all the fields")
@@ -71,7 +72,8 @@ const Signup = (props) => {
       setInfomess("User Already Exists, Please Login");
       return;
     }
-    console.log(ress);
+    else if(ress.data.message=="user registered"){
+      console.log(ress);
     setInfomess();
     setErrormess();
     setInfomess("Sending Email Verification OTP.")
@@ -79,6 +81,8 @@ const Signup = (props) => {
     setInfomess();
     setSignupOtpPage(true);
     setVermess(email);
+    }
+    
   }
 
   const verifysignupOTP = async (e) => {
@@ -257,7 +261,7 @@ const Signup = (props) => {
                   />
                 </div>
                 <p className="for-pass">
-                  Forgot Password? <NavLink className="nav-col" to="/auth/forgotpassword">Reset Now!</NavLink>
+                  Forgot Password? <NavLink className="nav-col" style={{textDecoration:"none"}} to="/auth/forgotpassword">Reset Now!</NavLink>
                 </p>
                 <input
                   onClick={login}

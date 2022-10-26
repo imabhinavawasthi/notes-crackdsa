@@ -1,36 +1,171 @@
 import React, { useState } from "react";
-import registerpic from "./register.svg";
-import log from "./log.svg";
+import registerpic from "./register.svg"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router";
-import { NavLink } from "react-router-dom";
-import "./forgotpassword.css"
+import { faUser, faLock, faEnvelope, faUniversity, faLockOpen } from "@fortawesome/free-solid-svg-icons";
 import "./signup.css"
+import log from "./log.svg"
+import { NavLink } from "react-router-dom";
+import { useNavigate } from 'react-router';
+import * as api from "../../axios.js"
 
-const ForgotPassword = (props) => {
+const Signup = (props) => {
+  const navigate = useNavigate()
+  const [isActive, setIsActive] = useState(false);
   const [email, setEmail] = useState();
-  const [sucessmess, setSuccesmess] = useState("");
-  const [errormess, setErrormess] = useState("");
-  const submitclick = () => {
-    alert("done")
+  const [logemail, setLogEmail] = useState();
+  const [usercred, setUserCred] = useState();
+  const [password, setPassword] = useState();
+  const [logpassword, setLogPassword] = useState();
+  const [name, setName] = useState();
+  const [errormess, setErrormess] = useState();
+  const [logerrormess, setLogErrormess] = useState();
+  const [errortmess, setErrortmess] = useState();
+  const [infomess, setInfomess] = useState();
+  const [loginfomess, setLogInfomess] = useState();
+  const [vermess, setVermess] = useState();
+  const [logvermess, setLogVermess] = useState();
+  const [logsuccessmess, setLogSuccessmess] = useState();
+  const [successmess, setSuccessmess] = useState();
+  const [college, setCollege] = useState();
+  const [signupOtpPage, setSignupOtpPage] = useState(false);
+  const [loginOtpPage, setLoginOtpPage] = useState(false);
+  const [signupotp, setSignupotp] = useState();
+  const [loginotp, setLoginotp] = useState();
+
+  const curruser = JSON.parse(localStorage.getItem('crackdsa-user'));
+
+  if (curruser) {
+    navigate("/")
+  }
+
+  function isValidEmail(email) {
+    return /\S+@\S+\.\S+/.test(email);
+  }
+
+  const changeauth = (e) => {
+    setErrormess(); setInfomess(); setErrortmess(); setSuccessmess();
+    setLogErrormess(); setLogInfomess(); setLogSuccessmess();
+    setIsActive((current) => !current);
+  };
+  let ress;
+  let resl;
+  const login = async (e) => {
+    e.preventDefault();
+    setLogInfomess("Verifying ...")
+    if (!logemail) {
+      setLogErrormess("Please Enter Email!")
+      setLogInfomess()
+      return;
+    }
+    if (isValidEmail(logemail) == false) {
+      setLogErrormess("Enter Valid Email");
+      setLogInfomess()
+      return;
+    }
+    resl = await api.checkUserExists({ email: logemail });
+    if (resl.data.message == "user not exists") {
+      setLogInfomess("User Doesn't Exists");
+      return;
+    }
+    else {
+      setLogErrormess();
+      setLogInfomess("Sending Email Verification OTP...")
+      let otpsendres = await api.sendOTP({ email: logemail, name: logemail });
+      setLogInfomess();
+      setLogVermess(logemail);
+      setLoginOtpPage(true);
+      return;
+    }
+  }
+  const verifyloginOTP = async (e) => {
+    e.preventDefault();
+    if (!loginotp) {
+      setLogErrormess("Please Enter OTP");
+      return;
+    }
+    else {
+      let otpres = await api.verifyOTP({ email: logemail, OTP: loginotp });
+
+      if (otpres.data.message == "wrong otp") {
+        setLogErrormess("Wrong OTP");
+      }
+      else {
+        setLogSuccessmess("Successfully Verified")
+        navigate(`/auth/resetpassword/${logemail}`)
+      }
+    }
   }
   return (
     <div>
-      <div className="container">
+      <div className={isActive ? "containerr sign-up-mode" : "containerr"}>
         <div className="forms-container">
           <div className="signin-signup">
-            {sucessmess && <>
-              <div className="ver-mess">
-                {sucessmess}
-              </div>
-            </>}
-            {!sucessmess && <>
+            {loginOtpPage ? <>
               <form className="sign-in-form">
-                <h2 className="title">Forgot Password</h2>
-                {errormess && <>
-                  <div className="error-mess">
-                    {errormess}
+                <h2 className="title">Verify Email</h2>
+                {logerrormess && (<>
+                  <div className="error-mess" >{logerrormess}</div>
+                </>)}
+                {(logvermess && !logsuccessmess) && (
+                  <>
+                    <div className="ver-mess">
+                      <p>An email verification <strong>OTP</strong> has been sent to</p>
+                      <strong>{logvermess}</strong>
+                      <p>Verify Your Email</p>
+                    </div>
+                  </>
+                )}
+                {loginfomess && <>
+                  <div className="info-mess">
+                    {loginfomess}
+                  </div>
+                </>}
+                {logsuccessmess && <>
+                  <div className="success-mess">
+                    {logsuccessmess}
+                  </div>
+                </>}
+                <div style={{ display: "none" }} className="input-field">
+                  <i>
+                    <FontAwesomeIcon icon={faLock}></FontAwesomeIcon>
+                  </i>
+                  <input
+                    onChange={(e) => { setLoginotp(e.target.value); setLogErrormess(); setLogInfomess(); }}
+                    type="number"
+                    placeholder="Enter OTP (Check Email)"
+                  />
+                </div>
+                <div className="input-field">
+                  <i>
+                    <FontAwesomeIcon icon={faLock}></FontAwesomeIcon>
+                  </i>
+                  <input
+                    onChange={(e) => { setLoginotp(e.target.value); setLogErrormess(); setLogInfomess(); }}
+                    type="number"
+                    placeholder="Enter OTP (Check Email)"
+                  />
+                </div>
+                <input
+                  onClick={verifyloginOTP}
+                  type="submit"
+                  value="Enter"
+                  className="btn solid "
+                />
+              </form>
+            </> : <>
+              <form className="sign-in-form">
+                <h2 className="title">Reset Password</h2>
+                {logerrormess && (<>
+                  <div className="error-mess" >{logerrormess}</div>
+                </>)}
+                {loginfomess && <>
+                  <div className="info-mess">
+                    {loginfomess}
+                  </div>
+                </>}
+                {logsuccessmess && <>
+                  <div className="success-mess">
+                    {logsuccessmess}
                   </div>
                 </>}
                 <div className="input-field">
@@ -38,30 +173,33 @@ const ForgotPassword = (props) => {
                     <FontAwesomeIcon icon={faEnvelope}></FontAwesomeIcon>
                   </i>
                   <input
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => { setLogEmail(e.target.value); setLogErrormess(); setLogInfomess(); }}
                     type="email"
                     placeholder="Email"
                   />
                 </div>
 
                 <input
-                  onClick={submitclick}
+                  onClick={login}
                   type="submit"
-                  value="Verify"
+                  value="Verify Email"
                   className="btn solid "
                 />
+
+                <p className="for-pass mt-3">
+                  Back to Login <NavLink style={{ textDecoration: "none" }} className="nav-col" to="/auth">Here</NavLink>
+                </p>
               </form>
-            </>
-            }
+            </>}
           </div>
         </div>
 
         <div className="panels-container">
           <div className="panel left-panel">
             <div className="content">
-              <h3>How to remember your password?</h3>
+              <h3>DSA Notes | crackDSA.com</h3>
               <p>
-                Learn It!
+                Reset Your Password
               </p>
             </div>
             <img src={log} className="image" alt="img" />
@@ -72,4 +210,4 @@ const ForgotPassword = (props) => {
   );
 };
 
-export default ForgotPassword;
+export default Signup;

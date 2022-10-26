@@ -1,5 +1,5 @@
 import { Sidebar, SidebarItem } from "react-responsive-sidebar";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import logogif from "../../Components/assets/logo.gif"
 import "./sidebar.css"
 import { PersonLinesFill, BoxArrowInRight } from 'react-bootstrap-icons';
@@ -8,7 +8,10 @@ const logout = (e) => {
   localStorage.removeItem("crackdsa-user");
   window.location.reload(false);
 }
+const curruser = JSON.parse(localStorage.getItem('crackdsa-user'));
+
 export const items = [
+  
   <SidebarItem>
     <div className="pt-3 pb-3">
       <NavLink to="/" style={{ textDecoration: 'none' }}><img className="logogif-css" src={logogif} alt="crackdsanoteslogo" /></NavLink>
@@ -37,8 +40,12 @@ export const items = [
     </div>
   </SidebarItem>,
   <SidebarItem>
-    <div className="mt-5">
+    {curruser?<><div className="mt-5">
       <button className="button-css" onClick={(e) => { logout(e) }}  >Logout <BoxArrowInRight /></button>
+    </div></>:<>
+    <div className="mt-5">
+      <NavLink className="button-css p-3" style={{textDecoration:"none",color: "white"}} to="/auth"  >Signup/Login <BoxArrowInRight /></NavLink>
     </div>
+    </>}
   </SidebarItem>,
 ];

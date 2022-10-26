@@ -5,7 +5,7 @@ import 'react-loading-skeleton/dist/skeleton.css'
 import { NavLink } from "react-router-dom";
 import { items } from '../SidebarP/ItemsList.js';
 import { Sidebar } from "react-responsive-sidebar";
-import Tabs from '../../Components/utils/Tabs/Tabs.jsx';
+import Tabs from '../../Components/utils/Tabs/Tabs.jsx'; 
 import Avatar from 'react-avatar';
 import ProblemList from '../Problems/ProblemList.jsx';
 import Footer from '../../Components/Footer/Footer.jsx';

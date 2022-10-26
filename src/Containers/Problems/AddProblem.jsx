@@ -153,6 +153,20 @@ const AddProblem = (props) => {
                                 <option value="Other" selected="">Topic/Tag</option>
                                 <option value="Binary Search">Binary Search</option>
                                 <option value="Dynamic Programming">Dynamic Programming</option>
+                                <option value="Arrays">Arrays</option>
+                                <option value="Strings">Strings</option>
+                                <option value="Tree">Tree</option>
+                                <option value="Hashing">Hashing</option>
+                                <option value="Linked List">Linked List</option>
+                                <option value="Graph">Graph</option>
+                                <option value="Stack">Stack</option>
+                                <option value="Queue">Queue</option>
+                                <option value="Heap">Heap</option>
+                                <option value="Segment Tree">Segment Tree</option>
+                                <option value="Sorting">Sorting</option>
+                                <option value="Bit Manipulation">Bit Manipulation</option>
+                                <option value="Greedy">Greedy</option>
+                                <option value="Backtracking">Backtracking</option>
                                 <option value="Other">Other</option>
                               </select>
                             </div>
