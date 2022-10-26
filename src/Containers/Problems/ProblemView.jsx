@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { NavLink } from 'react-router-dom'
+import { Navigate, NavLink, useFetcher } from 'react-router-dom'
 import Footer from '../../Components/Footer/Footer.jsx'
 import { items } from "../../Containers/SidebarP/ItemsList.js"
 import { Sidebar } from "react-responsive-sidebar";
@@ -8,10 +8,12 @@ import * as api from "../../axios.js"
 import "./problemview.css"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUpRightFromSquare, faCalendar, faCheckCircle, faClock, faCode, faExclamationCircle, faTags, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import Skeleton from 'react-loading-skeleton';
+import Loading from "../../Components/Loading/Loading.jsx"
 
 const ProblemView = () => {
   const params = useParams()
-
+const[mark,setMark]=useState(false)
   const [problemDetails, setProblemDetails] = useState()
 
   useEffect(() => {
@@ -36,8 +38,12 @@ const ProblemView = () => {
   let platform = problemDetails?.platform;
 
   const markProblem=()=>{
+setMark(true)
     let res=api.markProblem({todo_id:params?.id});
-    window.location.reload()
+    setTimeout(() => {
+    
+      window.location.reload()
+    }, 1000);
   }
 
   return (
@@ -62,42 +68,41 @@ const ProblemView = () => {
         {problemDetails?.topic} */}
         <div class=" position-relative mt-5 pt-5 p-5  p-md-5 m-md-3 text-center bg-light">
           <div class=" p-lg-5 mx-auto ">
-            <h1 class="display-4 font-weight-normal">
+            {problemDetails?<h1 class="display-4 font-weight-normal">
               {platform == "Leetcode" && <img width="50px" src={leetcodeLogo} />}
-              {platform == "GeeksforGeeks" && <img width="50px" src={gfgLogo} />}
-              {params.name}&nbsp;&nbsp;&nbsp;<a target="__blank" href={problemDetails?.link}><FontAwesomeIcon color='#6c757d' icon={faArrowUpRightFromSquare} /></a></h1>
-            <ul class=" mt-3 mb-3 ul-list-css d-md-flex flex-wrap align-items-center justify-content-center text-capitalize ff-open-sans">
+              {platform == "GeeksforGeeks" && <img width="50px" src={gfgLogo} />}&nbsp;&nbsp;{params.name}&nbsp;&nbsp;&nbsp;<a target="__blank" href={problemDetails?.link}><FontAwesomeIcon color='#6c757d' icon={faArrowUpRightFromSquare} /></a></h1>:<Skeleton/>}
+            {problemDetails?<ul class=" mt-3 mb-3 ul-list-css d-md-flex flex-wrap align-items-center justify-content-center text-capitalize ff-open-sans">
 
-              <li class="mr-4 problem-list-hover-css" >
-                <FontAwesomeIcon color='var(--theme-color)' icon={faCalendar} /> {convertDate(problemDetails?.date.substring(0, 10))} &nbsp;&nbsp;&nbsp;
-              </li>
-              {/* <li class="mr-4 problem-list-hover-css" >
-                <FontAwesomeIcon color='var(--theme-color)' icon={faClock} /> {problemDetails?.date.substring(11, 19)} &nbsp;&nbsp;&nbsp;
-              </li> */}
-            </ul>
-            <ul class=" mt-3 mb-3 ul-list-css d-md-flex flex-wrap align-items-center justify-content-center text-capitalize ff-open-sans">
+<li class="mr-4 problem-list-hover-css" >
+  <FontAwesomeIcon color='var(--theme-color)' icon={faCalendar} /> {convertDate(problemDetails?.date.substring(0, 10))} &nbsp;&nbsp;&nbsp;
+</li>
+{/* <li class="mr-4 problem-list-hover-css" >
+  <FontAwesomeIcon color='var(--theme-color)' icon={faClock} /> {problemDetails?.date.substring(11, 19)} &nbsp;&nbsp;&nbsp;
+</li> */}
+</ul>:<Skeleton/>}
+            {problemDetails?<ul class=" mt-3 mb-3 ul-list-css d-md-flex flex-wrap align-items-center justify-content-center text-capitalize ff-open-sans">
 
-              <li class="mr-4 problem-list-hover-css" >
-                <FontAwesomeIcon color='var(--theme-color)' icon={faCode} /> {problemDetails?.platform} &nbsp;&nbsp;&nbsp;
-              </li>
-              <li class="mr-4 problem-list-hover-css">
-                {problemDetails?.isSolved ?
-                  <div><FontAwesomeIcon color='green' icon={faCheckCircle} /> Solved&nbsp;&nbsp;&nbsp;</div> :
-                  <div>
-                    <FontAwesomeIcon color="#8B8000" icon={faExclamationCircle} /> Unsolved&nbsp;&nbsp;&nbsp;
-                  </div>
-                }
+<li class="mr-4 problem-list-hover-css" >
+  <FontAwesomeIcon color='var(--theme-color)' icon={faCode} /> {problemDetails?.platform} &nbsp;&nbsp;&nbsp;
+</li>
+<li class="mr-4 problem-list-hover-css">
+  {problemDetails?.isSolved ?
+    <div><FontAwesomeIcon color='green' icon={faCheckCircle} /> Solved&nbsp;&nbsp;&nbsp;</div> :
+    <div>
+      <FontAwesomeIcon color="#8B8000" icon={faExclamationCircle} /> Unsolved&nbsp;&nbsp;&nbsp;
+    </div>
+  }
 
-              </li>
-              <li class=" mr-4 problem-list-hover-css">
-                <FontAwesomeIcon color='blue' icon={faTags} /> {problemDetails?.topic}&nbsp;&nbsp;&nbsp;
-              </li>
-            </ul>
+</li>
+<li class=" mr-4 problem-list-hover-css">
+  <FontAwesomeIcon color='blue' icon={faTags} /> {problemDetails?.topic}&nbsp;&nbsp;&nbsp;
+</li>
+</ul>:<Skeleton/>}
 
-            {problemDetails?.isSolved ? <p>Mark this problem as <button style={{color:"grey",fontWeight:"bolder"}} className="remove-default" onClick={()=>markProblem()}>Unsolved</button></p> : <p>Mark this problem as <button className="remove-default" style={{color:"green",fontWeight:"bolder"}} onClick={()=>markProblem()}>Solved</button></p>}
+            {problemDetails?<>{mark&&<Loading/>}{!mark&&problemDetails?.isSolved ? <p>Mark this problem as <button style={{color:"grey",fontWeight:"bolder"}} className="remove-default" onClick={()=>markProblem()}>Unsolved</button></p> : <p>Mark this problem as <button className="remove-default" style={{color:"green",fontWeight:"bolder"}} onClick={()=>markProblem()}>Solved</button></p>}</>:<Skeleton/>}
 
-            <p class="font-weight-normal mt-5 mb-5"><h6 className='problem-list-hover-css'><FontAwesomeIcon color='var(--theme-color)' icon={faInfoCircle} />&nbsp;Problem Desciption:</h6>&nbsp;&nbsp;&nbsp;{problemDetails?.description}</p>
-            <button className='button-css'><a target="_blank" style={{ textDecoration: "none", color: "white" }} href={problemDetails?.link}>Practice Now</a></button>
+            {problemDetails?(<><p class="font-weight-normal mt-5 mb-5"><h6 className='problem-list-hover-css'><FontAwesomeIcon color='var(--theme-color)' icon={faInfoCircle} />&nbsp;Problem Desciption:</h6>&nbsp;&nbsp;&nbsp;{problemDetails?.description}</p>
+            <button className='button-css'><a target="_blank" style={{ textDecoration: "none", color: "white" }} href={problemDetails?.link}>Practice Now</a></button></>):<Skeleton/>}
           </div>
         </div>
 
