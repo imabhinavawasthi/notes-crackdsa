@@ -76,3 +76,8 @@ export const resetPass = async (userDetails) => {
 
     return user;
 }
+
+export const markProblem=async(problemID)=>{
+    let res=await API.post("/user/marktodo",problemID);
+    return res;
+}
