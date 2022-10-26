@@ -3,8 +3,8 @@ import axios from 'axios'
 
 
 const API = axios.create({
-    // baseURL: 'http://localhost:8080/'
-    baseURL: 'https://notes-crackdsa.herokuapp.com/'
+    baseURL: 'http://localhost:8080/'
+    // baseURL: 'https://notes-crackdsa.herokuapp.com/'
 })
 
 API.interceptors.request.use((req) => {
@@ -75,4 +75,9 @@ export const resetPass = async (userDetails) => {
     let user = await API.post('/auth/forgotpassword', userDetails)
 
     return user;
+}
+
+export const markProblem=async(problemID)=>{
+    let res=await API.post("/user/marktodo",problemID);
+    return res;
 }
