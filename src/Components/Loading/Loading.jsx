@@ -3,7 +3,7 @@ import "./loading.css"
 const Loading = (props) => {
     return (
         <div >
-            <div class="dots-l">
+            <div class="dots-l d-flex justify-content-center align-items-center">
                 <span className='span-css-load'></span>
                 <span className='span-css-load'></span>
                 <span className='span-css-load'></span>

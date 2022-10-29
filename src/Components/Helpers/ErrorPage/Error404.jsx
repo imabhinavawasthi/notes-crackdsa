@@ -6,6 +6,7 @@ import { items } from "../../../Containers/SidebarP/ItemsList.js"
 import { Sidebar } from "react-responsive-sidebar";
 
 const Error404 = () => {
+  document.title="Page Not Found! crackDSA.com"
   return (
     <div>
       <Sidebar

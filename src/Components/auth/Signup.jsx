@@ -73,7 +73,7 @@ const Signup = (props) => {
       return;
     }
     else if(ress.data.message=="user registered"){
-      console.log(ress);
+      // console.log(ress);
     setInfomess();
     setErrormess();
     setInfomess("Sending Email Verification OTP.")
@@ -92,21 +92,28 @@ const Signup = (props) => {
       return;
     }
     else {
+      setInfomess("Verifying OTP...")
       let otpres = await api.verifyOTP({ email: email, OTP: signupotp });
 
       if (otpres.data.message == "wrong otp") {
         setErrormess("Wrong OTP");
+        setInfomess("")
       }
       else {
+        setInfomess("")
         setSuccessmess("Successfully Verified, Welcome to crackDSA!")
-        setLogEmail(email);
-        setLogPassword(password);
-        login(e);
+        setTimeout(() => {
+          setSuccessmess("Taking you in...")
+        }, 1000);
+        let resl = await api.userLogin({ email: email, password: password });
+        localStorage.setItem("crackdsa-user", JSON.stringify(resl.data))
+        setTimeout(() => {
+          window.location.reload()
+        }, 1000);
 
       }
     }
   }
-  let resl;
   const login = async (e) => {
     e.preventDefault();
     setLogInfomess("Logging You In...")
@@ -120,7 +127,8 @@ const Signup = (props) => {
       setLogInfomess()
       return;
     }
-    resl = await api.userLogin({ email: logemail, password: logpassword });
+    console.log(logemail," ",logpassword);
+    let resl = await api.userLogin({ email: logemail, password: logpassword });
     if (resl.data.message == "wrong email or password") {
       setLogInfomess("Oops! Wrong Email or Password");
       return;
@@ -142,6 +150,7 @@ const Signup = (props) => {
     else {
       setLogInfomess();
       setLogSuccessmess("You are logged in!")
+      setSuccessmess("You are welcome :)")
       localStorage.setItem("crackdsa-user", JSON.stringify(resl.data))
       setTimeout(() => {
         window.location.reload(false);
@@ -161,8 +170,12 @@ const Signup = (props) => {
         setLogErrormess("Wrong OTP");
       }
       else {
-        setLogSuccessmess("Successfully Verified, Welcome to crackDSA!")
-        login(e);
+        setLogSuccessmess("Successfully Verified, taking you in...")
+        let resl = await api.userLogin({ email: logemail, password: logpassword });
+        localStorage.setItem("crackdsa-user", JSON.stringify(resl.data))
+        setTimeout(() => {
+          window.location.reload()
+        }, 1000);
       }
     }
   }
@@ -197,6 +210,7 @@ const Signup = (props) => {
                     {logsuccessmess}
                   </div>
                 </>}
+                {!logsuccessmess&&<>
                 <div style={{ display: "none" }} className="input-field">
                   <i>
                     <FontAwesomeIcon icon={faLock}></FontAwesomeIcon>
@@ -205,6 +219,7 @@ const Signup = (props) => {
                     onChange={(e) => { setLoginotp(e.target.value); setLogErrormess(); setLogInfomess(); }}
                     type="number"
                     placeholder="Enter OTP (Check Email)"
+                    autoComplete="off"
                   />
                 </div>
                 <div className="input-field">
@@ -215,6 +230,7 @@ const Signup = (props) => {
                     onChange={(e) => { setLoginotp(e.target.value); setLogErrormess(); setLogInfomess(); }}
                     type="number"
                     placeholder="Enter OTP (Check Email)"
+                    autoComplete="off"
                   />
                 </div>
                 <input
@@ -223,6 +239,7 @@ const Signup = (props) => {
                   value="Enter"
                   className="btn solid "
                 />
+                </>}
               </form>
             </> : <>
               <form className="sign-in-form">
@@ -240,6 +257,7 @@ const Signup = (props) => {
                     {logsuccessmess}
                   </div>
                 </>}
+                {!logsuccessmess&&<>
                 <div className="input-field">
                   <i>
                     <FontAwesomeIcon icon={faEnvelope}></FontAwesomeIcon>
@@ -269,6 +287,7 @@ const Signup = (props) => {
                   value="Login"
                   className="btn solid "
                 />
+                </>}
                 {/* <p className="social-text for-pass">Or Sign in with social platforms</p>
               <div className="social-media">
                 <button
@@ -320,7 +339,8 @@ const Signup = (props) => {
                         </form>
                       </>
                     )}
-                    <div className="input-field">
+                    {!successmess&&<>
+                      <div className="input-field">
                       <i>
                         <FontAwesomeIcon icon={faLock}></FontAwesomeIcon>
                       </i>
@@ -337,6 +357,7 @@ const Signup = (props) => {
                       value="Sign up"
                       onClick={verifysignupOTP}
                     />
+                      </>}
                     {/* <p className="social-text">
                     Or Sign up with social platforms
                   </p>
@@ -375,6 +396,7 @@ const Signup = (props) => {
                         {successmess}
                       </div>
                     </>}
+                    {!successmess&&<>
                     <div className="input-field">
                       <i>
                         <FontAwesomeIcon icon={faUser}></FontAwesomeIcon>
@@ -421,6 +443,7 @@ const Signup = (props) => {
                       value="Verify Email"
                       onClick={signup}
                     />
+                    </>}
                     {/* <p className="social-text">
                     Or Sign up with social platforms
                   </p>
