@@ -34,11 +34,10 @@ color: #fff;
 }
 
 .career-form .custom-select {
-  background: #000;
 background-color: rgba(255, 255, 255, 0.2);
 border: 0;
 padding: 12px 15px;
-color: #fff;
+color: #000;
 font-weight: bold;
 width: 100%;
 border-radius: 5px;
