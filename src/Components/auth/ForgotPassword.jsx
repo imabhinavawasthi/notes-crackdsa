@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import registerpic from "./register.svg"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faLock, faEnvelope, faUniversity, faLockOpen } from "@fortawesome/free-solid-svg-icons";
+import { faUser, faLock, faEnvelope, faUniversity, faLockOpen,faAnchorLock } from "@fortawesome/free-solid-svg-icons";
 import "./signup.css"
 import log from "./log.svg"
 import { NavLink } from "react-router-dom";
@@ -31,6 +31,7 @@ const Signup = (props) => {
   const [loginOtpPage, setLoginOtpPage] = useState(false);
   const [signupotp, setSignupotp] = useState();
   const [loginotp, setLoginotp] = useState();
+  const [reset,setReset]=useState(false);
 
   const curruser = JSON.parse(localStorage.getItem('crackdsa-user'));
 
@@ -91,13 +92,120 @@ const Signup = (props) => {
       }
       else {
         setLogSuccessmess("Successfully Verified")
-        navigate(`/auth/resetpassword/${logemail}`)
+        setReset(true);
+        // navigate(`/auth/resetpassword/${logemail}`)
       }
     }
   }
+    const [pass, setPass] = useState()
+    const [conpass, setConPass] = useState()
+    const [logrerrormess, setLogrErrormess] = useState();
+    const [logrinfomess, setLogrInfomess] = useState();
+    const [logrsuccessmess, setLogrSuccessmess] = useState();
+    const resetPass = async (e) => {
+        e.preventDefault()
+        if (!pass || !conpass) {
+            setLogrErrormess("Please fill both the fields!")
+            setLogrInfomess()
+            return;
+        }
+        else if (pass != conpass) {
+            setLogrErrormess("Password doesn't match!")
+            setLogrInfomess()
+            return;
+        }
+        else {
+            setLogrInfomess("Updating New Password")
+            let res = await api.resetPass({ email: logemail, new_password: pass });
+            if (res.data.message == "user not exists") {
+                setLogrErrormess("Unauthorised Action")
+                setLogrInfomess()
+                return;
+            }
+            else {
+                setLogrErrormess()
+                setLogrInfomess()
+                setLogrSuccessmess("done")
+
+            }
+        }
+    }
   return (
     <div>
-      <div className={isActive ? "containerr sign-up-mode" : "containerr"}>
+      {reset&&<>
+        <div className={isActive ? "containerr sign-up-mode" : "containerr"}>
+        <div className="forms-container">
+          <div className="signin-signup">
+          <form className="sign-in-form mt-5">
+                        <h2 className="title">Reset Password</h2>
+                        {logrerrormess && (<>
+                            <div className="error-mess" >{logrerrormess}</div>
+                        </>)}
+                        {logrinfomess && <>
+                            <div className="info-mess">
+                                {logrinfomess}
+                            </div>
+                        </>}
+                        {logrsuccessmess && <>
+                            <div className="success-mess mt-5">
+                                Password Reset Done, You Can <NavLink style={{textDecoration:"none"}} to="/auth">Login</NavLink> Now!
+                            </div>
+                        </>}
+                        {!logrsuccessmess&&
+                        <div>
+                        <div className="input-field">
+                            <i>
+                                <FontAwesomeIcon icon={faLock}></FontAwesomeIcon>
+                            </i>
+                            <input
+                                onChange={(e) => { setPass(e.target.value); setLogrErrormess(); setLogrInfomess(); }}
+                                type="password"
+                                placeholder="New Password"
+                            />
+                        </div>
+                        <div className="input-field">
+                            <i>
+                                <FontAwesomeIcon icon={faAnchorLock}></FontAwesomeIcon>
+                            </i>
+                            <input
+                                onChange={(e) => { setConPass(e.target.value); setLogrErrormess(); setLogrInfomess(); }}
+                                type="text"
+                                placeholder="Confirm Password"
+                            />
+                        </div>
+
+                        <input
+                            onClick={(e) => { resetPass(e) }}
+                            type="submit"
+                            value="Reset"
+                            className="btn solid "
+                        />
+                        </div>
+                        
+                        }
+
+                        <p className="for-pass mt-3">
+                            Back to Login <NavLink style={{ textDecoration: "none" }} className="nav-col" to="/auth">Here</NavLink>
+                        </p>
+                    </form>
+          </div>
+        </div>
+
+        <div className="panels-container">
+          <div className="panel left-panel">
+            <div className="content">
+              <h3>DSA Notes | crackDSA.com</h3>
+              <p>
+                Reset Your Password
+              </p>
+            </div>
+            <img src={log} className="image" alt="img" />
+          </div>
+        </div>
+      </div>
+        
+      </>}
+      {!reset&&<div className={isActive ? "containerr sign-up-mode" : "containerr"}>
         <div className="forms-container">
           <div className="signin-signup">
             {loginOtpPage ? <>
@@ -148,7 +256,7 @@ const Signup = (props) => {
                 <input
                   onClick={verifyloginOTP}
                   type="submit"
-                  value="Enter"
+                  value="Next"
                   className="btn solid "
                 />
               </form>
@@ -205,7 +313,7 @@ const Signup = (props) => {
             <img src={log} className="image" alt="img" />
           </div>
         </div>
-      </div>
+      </div>}
     </div>
   );
 };

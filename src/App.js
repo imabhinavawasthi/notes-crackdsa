@@ -10,6 +10,8 @@ import Error404 from "./Components/Helpers/ErrorPage/Error404.jsx";
 import ResetPassword from "./Components/auth/ResetPassword.jsx"
 import TermsAndConditions from "./Components/Helpers/TermsAndConditions.jsx";
 
+
+
 function App() {
 
 

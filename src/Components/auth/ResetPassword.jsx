@@ -12,37 +12,37 @@ const ResetPassword = () => {
     const navigate = useNavigate()
     const [pass, setPass] = useState()
     const [conpass, setConPass] = useState()
-    const [logerrormess, setLogErrormess] = useState();
-    const [loginfomess, setLogInfomess] = useState();
-    const [logvermess, setLogVermess] = useState();
-    const [logsuccessmess, setLogSuccessmess] = useState();
+    const [logrerrormess, setLogrErrormess] = useState();
+    const [logrinfomess, setLogrInfomess] = useState();
+    const [logrvermess, setLogrVermess] = useState();
+    const [logrsuccessmess, setLogrSuccessmess] = useState();
     if (!params.email) {
         navigate("/")
     }
     const resetPass = async (e) => {
         e.preventDefault()
         if (!pass || !conpass) {
-            setLogErrormess("Please fill both the fields!")
-            setLogInfomess()
+            setLogrErrormess("Please fill both the fields!")
+            setLogrInfomess()
             return;
         }
         else if (pass != conpass) {
-            setLogErrormess("Password doesn't match!")
-            setLogInfomess()
+            setLogrErrormess("Password doesn't match!")
+            setLogrInfomess()
             return;
         }
         else {
-            setLogInfomess("Updating New Password")
+            setLogrInfomess("Updating New Password")
             let res = await api.resetPass({ email: params.email, new_password: pass });
             if (res.data.message == "user not exists") {
-                setLogErrormess("Unauthorised Action")
-                setLogInfomess()
+                setLogrErrormess("Unauthorised Action")
+                setLogrInfomess()
                 return;
             }
             else {
-                setLogErrormess()
-                setLogInfomess()
-                setLogSuccessmess("done")
+                setLogrErrormess()
+                setLogrInfomess()
+                setLogrSuccessmess("done")
 
             }
         }
@@ -51,58 +51,7 @@ const ResetPassword = () => {
         <div>
             {params?.email && <div>
                 <>
-                    <form className="sign-in-form mt-5">
-                        <h2 className="title">Reset Password</h2>
-                        {logerrormess && (<>
-                            <div className="error-mess" >{logerrormess}</div>
-                        </>)}
-                        {loginfomess && <>
-                            <div className="info-mess">
-                                {loginfomess}
-                            </div>
-                        </>}
-                        {logsuccessmess && <>
-                            <div className="success-mess mt-5">
-                                Password Reset Done, You Can <NavLink style={{textDecoration:"none"}} to="/auth">Login</NavLink> Now!
-                            </div>
-                        </>}
-                        {!logsuccessmess&&
-                        <div>
-                        <div className="input-field">
-                            <i>
-                                <FontAwesomeIcon icon={faLock}></FontAwesomeIcon>
-                            </i>
-                            <input
-                                onChange={(e) => { setPass(e.target.value); setLogErrormess(); setLogInfomess(); }}
-                                type="password"
-                                placeholder="New Password"
-                            />
-                        </div>
-                        <div className="input-field">
-                            <i>
-                                <FontAwesomeIcon icon={faAnchorLock}></FontAwesomeIcon>
-                            </i>
-                            <input
-                                onChange={(e) => { setConPass(e.target.value); setLogErrormess(); setLogInfomess(); }}
-                                type="text"
-                                placeholder="Confirm Password"
-                            />
-                        </div>
-
-                        <input
-                            onClick={(e) => { resetPass(e) }}
-                            type="submit"
-                            value="Reset"
-                            className="btn solid "
-                        />
-                        </div>
-                        
-                        }
-
-                        <p className="for-pass mt-3">
-                            Back to Login <NavLink style={{ textDecoration: "none" }} className="nav-col" to="/auth">Here</NavLink>
-                        </p>
-                    </form>
+                    
                 </></div>}
         </div>
     )

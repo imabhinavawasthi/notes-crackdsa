@@ -22,6 +22,7 @@ const AddProblem = (props) => {
     if (!curruser) {
       navigate("/");
     }
+    document.title="Add Problem- notes.crackDSA.com"
 
   }, [curruser])
 

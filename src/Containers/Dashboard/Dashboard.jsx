@@ -9,6 +9,8 @@ import Tabs from '../../Components/utils/Tabs/Tabs.jsx';
 import Avatar from 'react-avatar';
 import ProblemList from '../Problems/ProblemList.jsx';
 import Footer from '../../Components/Footer/Footer.jsx';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHandshake } from '@fortawesome/free-solid-svg-icons';
 
 
 const Dashboard = (props) => {
@@ -33,6 +35,7 @@ const Dashboard = (props) => {
     } else {
       setWish("Good Evening!");
     }
+    document.title="Dashboard"
   }, [])
 
   return (
@@ -72,7 +75,7 @@ const Dashboard = (props) => {
               <hr /> */}
               <div className='row'>
               <div style={{ position: "fixed", top: "0", backgroundColor:"var(--theme-color)", color:"white" }} class="alert alert-primary" role="alert">
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Hey <strong>{curruser?.name}</strong>, we are still in beta, sorry for half cooked experience.
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<FontAwesomeIcon icon={faHandshake}/> Hey <strong>{curruser?.name}</strong>, we are still in beta, sorry for half cooked experience.
               </div>
               </div>
               <div className='row mt-5 p-3 pt-0'>

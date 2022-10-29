@@ -65,7 +65,7 @@ const Footer = () => {
             <a style={{textDecoration:"none", color:"var(--theme-color)"}} href="" target="_blank" >About Notes crackDSA</a>
             </p>
             <p>
-            <a style={{textDecoration:"none", color:"var(--theme-color)"}} href="" target="_blank" >Internships</a>
+            <a style={{textDecoration:"none", color:"var(--theme-color)"}} href="" target="_blank" >Contribute (Join Us)</a>
             </p>
             <p>
             <a style={{textDecoration:"none", color:"var(--theme-color)"}} href="https://crackdsa.com" target="_blank" >Learn DSA | crackdsa.com</a>

@@ -15,6 +15,7 @@ const DsaSheet = (props) => {
     if(!curruser){
       navigate("/");
     }
+    document.title="DSA Sheet | Coming Soon";
   
   }, [curruser])
   return (
@@ -35,6 +36,7 @@ const DsaSheet = (props) => {
             <div class="wrapper-soon">
               <h1 class="h1-soon">coming soon<span class="dot">.</span></h1>
               <p class="p-soon">we are building DSA Sheet</p>
+              <p class="p-soon" >Wanted to contribute?  <a style={{textDecoration:"none"}} href="#">Click Here</a></p>
               {/* <div class="icons-soon">
                 <a href=""><i class="fa fa-twitter"></i></a>
                 <a href=""><i class="fa fa-youtube-play"></i></a>
