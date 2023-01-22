@@ -4,7 +4,8 @@ import axios from 'axios'
 
 const API = axios.create({
     // baseURL: 'http://localhost:8080/'
-    baseURL: 'https://notes-crackdsa-backend-render.onrender.com'
+    // baseURL: 'https://notes-crackdsa-backend-render.onrender.com'
+    baseURL:'https://notes-crackdsa-backend-production.up.railway.app'
 })
 
 API.interceptors.request.use((req) => {

@@ -184,7 +184,8 @@ const Signup = (props) => {
       <div className={isActive ? "containerr sign-up-mode" : "containerr"}>
         <div className="forms-container">
           <div className="signin-signup">
-            {loginOtpPage ? <>
+            {loginOtpPage ? 
+            <>
               <form className="sign-in-form">
                 <h2 className="title">Verify Email</h2>
                 {logerrormess && (<>
